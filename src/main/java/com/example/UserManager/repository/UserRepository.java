@@ -11,8 +11,8 @@ public interface UserRepository {
     public UserDTO CreateUser(UserDTO user);
     public UserDTO GetUserById(String id) throws ExceptionUserService;
     public List<UserDTO> GetAllUsers() throws ExceptionUserService;
-    public UserDTO UpdateUserById(String id, UserDTO user);
+    public UserDTO UpdateUserById(String id, UserDTO userDTO) throws ExceptionUserService;
     public void MergeUsers();
-    public void DeleteUserById(String id);
+    public void DeleteUserById(String id) throws ExceptionUserService;
 
 }

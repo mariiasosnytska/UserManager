@@ -21,7 +21,7 @@ public class UserController {
 
     private final UserRepository userRepo;
 
-    @PostMapping("/addUser")
+    @PostMapping("/addUser") //check
     public ResponseEntity<?> addUser(@RequestBody @Valid UserDTO user, BindingResult bindingResult) {
         try{
             if(!bindingResult.hasErrors())
@@ -40,7 +40,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getAllUsers")
+    @GetMapping("/getAllUsers") //check
     public ResponseEntity<?> getAllUsers() {
         try{
             return new ResponseEntity<List<UserDTO>>(userRepo.GetAllUsers(), HttpStatus.OK);
@@ -49,7 +49,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/getUser/{id}")
+    @GetMapping("/getUser/{id}") //check
     public ResponseEntity<?> getUserById(@PathVariable("id") String id){
         try{
             return new ResponseEntity<>(userRepo.GetUserById(id), HttpStatus.OK);
@@ -60,25 +60,17 @@ public class UserController {
 
     @PutMapping("/updateUserByID/{id}")
     public ResponseEntity<?> updateUserByID(@PathVariable("id") String id, @RequestBody UserDTO user){
-        /*Optional<UserDTO> userOptional = userRepo.findById(id);
-        if(userOptional.isPresent())
-        {
-            UserDTO userToSave = userOptional.get();
-            userToSave.setName(user.getName() != null ? user.getName() : userToSave.getName());
-            userToSave.setSurname(user.getName() != null ? user.getSurname() : userToSave.getSurname());
-            userToSave.setEmail(user.getName() != null ? user.getEmail() : userToSave.getEmail());
-            userToSave.setPhoneNumber(user.getPassword() != null ? user.getPassword() : userToSave.getPassword());
-            userToSave.setPhoneNumber(user.getPhoneNumber() != null ? user.getPhoneNumber() : userToSave.getPhoneNumber());
-            userRepo.save(userToSave);*/
+        try {
             return new ResponseEntity<>(userRepo.UpdateUserById(id, user), HttpStatus.OK);
-        //}
-        //else return new ResponseEntity<>("Sorry, user with id " + id + "not found", HttpStatus.NOT_FOUND);
+        } catch (ExceptionUserService e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     @DeleteMapping("/deleteUserByID/{id}")
     public ResponseEntity<?> deleteUserByID(@PathVariable("id") String id){
         try{
-            //userRepo.deleteById(id);
+            userRepo.DeleteUserById(id);
             return new ResponseEntity<>("Deleted user with id " + id, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

@@ -18,39 +18,39 @@ import java.util.Optional;
 public class UserRepositorySpring implements UserRepository {
     private final UserRepositoryMongo userRepo;
     @Override
-    public UserDTO CreateUser(@Valid UserDTO user) {
-
+    public UserDTO CreateUser(UserDTO user) { //check
         userRepo.save(user);
         return user;
     }
 
     @Override
-    public UserDTO GetUserById(String id) throws ExceptionUserService {
+    public UserDTO GetUserById(String id) throws ExceptionUserService { //check
         Optional<UserDTO> userOptional = userRepo.findById(id);
         if (userOptional.isPresent()) return userOptional.get();
         else throw new ExceptionUserService(ExceptionUserService.ThisUserDoesNotExist());
     }
 
     @Override
-    public List<UserDTO> GetAllUsers() throws ExceptionUserService {
+    public List<UserDTO> GetAllUsers() throws ExceptionUserService { //check
         List<UserDTO> users = userRepo.findAll();
         if(users.size() > 0) return users;
         else throw new ExceptionUserService(ExceptionUserService.NoUsersFound());
     }
 
     @Override
-    public UserDTO UpdateUserById(String id, UserDTO user) {
+    public UserDTO UpdateUserById(String id, UserDTO user) throws ExceptionUserService { //fix
         Optional<UserDTO> userOptional = userRepo.findById(id);
         if(userOptional.isPresent()) {
             UserDTO userToSave = userOptional.get();
-            userToSave.setName(user.getName() != null ? user.getName() : userToSave.getName());
-            userToSave.setSurname(user.getName() != null ? user.getSurname() : userToSave.getSurname());
-            userToSave.setEmail(user.getName() != null ? user.getEmail() : userToSave.getEmail());
-            userToSave.setPhoneNumber(user.getPassword() != null ? user.getPassword() : userToSave.getPassword());
-            userToSave.setPhoneNumber(user.getPhoneNumber() != null ? user.getPhoneNumber() : userToSave.getPhoneNumber());
+            UserDTO userPrimary = userOptional.get();
+            userToSave.setName(user.getName() != null ? user.getName() : userPrimary.getName());
+            userToSave.setSurname(user.getName() != null ? user.getSurname() : userPrimary.getSurname());
+            userToSave.setEmail(user.getName() != null ? user.getEmail() : userPrimary.getEmail());
+            userToSave.setPhoneNumber(user.getPassword() != null ? user.getPassword() : userPrimary.getPassword());
+            userToSave.setPhoneNumber(user.getPhoneNumber() != null ? user.getPhoneNumber() : userPrimary.getPhoneNumber());
             userRepo.save(userToSave);
             return userToSave;
-        } else return null;
+        } else throw new ExceptionUserService(ExceptionUserService.ThisUserDoesNotExist());
     }
 
     @Override
@@ -59,7 +59,10 @@ public class UserRepositorySpring implements UserRepository {
     }
 
     @Override
-    public void DeleteUserById(String id) {
-        userRepo.deleteById(id);
+    public void DeleteUserById(String id) throws ExceptionUserService {
+        Optional<UserDTO> userOptional = userRepo.findById(id);
+        if (userOptional.isPresent()) userRepo.deleteById(id);
+        else throw new ExceptionUserService(ExceptionUserService.ThisUserDoesNotExist());
+
     }
 }
