@@ -1,18 +1,22 @@
 package com.example.UserManager.repository;
 
 import com.example.UserManager.model.UserDTO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.mongodb.core.query.Query;
+
 
 import java.util.List;
 
-@Repository
+@Component
 @Profile("template")
+@RequiredArgsConstructor
 public class UserRepositoryTemplate implements UserRepository {
-
-    //private final MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     @Override
     public UserDTO CreateUser(UserDTO user) {
@@ -22,14 +26,17 @@ public class UserRepositoryTemplate implements UserRepository {
 
     @Override
     public UserDTO GetUserById(String id) {
-
+        Query query = new Query();
+        query.addCriteria(Criteria.where("_id").is(id));
         return null;
     }
 
     @Override
     public List<UserDTO> GetAllUsers() {
-
-        return null;
+        Query query = new Query();
+        List<UserDTO> users = mongoTemplate.findAll(UserDTO.class, "userDTO");
+        System.out.println("OK!");
+        return users;
     }
 
     @Override
