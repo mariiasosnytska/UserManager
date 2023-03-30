@@ -2,8 +2,6 @@ package com.example.UserManager.repository;
 
 import com.example.UserManager.exception.ExceptionUserService;
 import com.example.UserManager.model.UserDTO;
-import org.springframework.stereotype.Repository;
-import org.springframework.validation.BindingResult;
 
 import java.util.List;
 

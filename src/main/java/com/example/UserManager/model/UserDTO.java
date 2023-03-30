@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.scheduling.annotation.Scheduled;
 
 @Getter
 @Setter
@@ -28,6 +29,6 @@ public class UserDTO {
     @NotNull(message = "Password should not be null")
     @Size(min = 3, max = 30, message = "Password must have from 3 to 30 symbols")
     private String password; //maybe char[] better idk
-    private boolean isActive;
+    private boolean isActive = true;
 
 }

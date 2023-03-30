@@ -13,5 +13,9 @@ public class ExceptionUserService extends Exception{
         return "Sorry, no Users found.";
     }
 
+    public static String UnvalidFields(){
+        return "Sorry, some fields are not valid";
+    }
+
 
 }
