@@ -42,7 +42,7 @@ public class UserRepositorySpring implements UserRepository {
     @Override
     public List<UserDTO> GetAllUsers() throws ExceptionUserService {
         List<UserDTO> users = userRepo.findAll(); //idk how to change to ArrayList
-        System.out.println(123);
+
         if(users.size() > 0) return users;
         else throw new ExceptionUserService(ExceptionUserService.NoUsersFound());
     }

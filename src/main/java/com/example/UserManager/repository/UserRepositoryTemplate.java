@@ -33,7 +33,6 @@ public class UserRepositoryTemplate implements UserRepository {
 
     @Override
     public UserDTO GetUserById(String id) throws ExceptionUserService {
-        System.out.println("template");
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(id));
 
