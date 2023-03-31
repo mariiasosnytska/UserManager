@@ -88,4 +88,5 @@ public class UserRepositorySpring implements UserRepository {
         if (userOptional.isPresent()) userRepo.deleteById(id);
         else throw new ExceptionUserService(ExceptionUserService.ThisUserDoesNotExist());
     }
+
 }
