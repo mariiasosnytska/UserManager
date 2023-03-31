@@ -41,10 +41,11 @@ public class UserRepositorySpring implements UserRepository {
 
     @Override
     public List<UserDTO> GetAllUsers() throws ExceptionUserService {
-        List<UserDTO> users = userRepo.findAll(); //idk how to change to ArrayList
+        List<UserDTO> users = new ArrayList<>(userRepo.findAll());
 
-        if(users.size() > 0) return users;
-        else throw new ExceptionUserService(ExceptionUserService.NoUsersFound());
+        if (!users.isEmpty()) {
+            return users;
+        } else throw new ExceptionUserService(ExceptionUserService.NoUsersFound());
     }
 
     @Override
@@ -74,8 +75,6 @@ public class UserRepositorySpring implements UserRepository {
             return userToUpdate;
         } else throw new ExceptionUserService(ExceptionUserService.ThisUserDoesNotExist());
     }
-
-
 
     @Override
     public void MergeUsers() {

@@ -6,3 +6,6 @@ spring:
       database: mydatabase
   profiles:
     active: spring
+  springdoc:
+    api-docs:
+      path: /api-docs

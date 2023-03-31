@@ -6,6 +6,8 @@ import java.util.List;
 import com.example.UserManager.exception.ExceptionUserService;
 import com.example.UserManager.model.UserDTO;
 import com.example.UserManager.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Service
 @EnableScheduling
+@Tag(name = "User API", description = "API for user management")
 public class UserController {
 
     private final UserRepository userRepo;
@@ -44,6 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/getAllUsers") //check
+    @Operation(summary = "Get all users")
     public ResponseEntity<?> getAllUsers() {
         try{
             return new ResponseEntity<List<UserDTO>>(userRepo.GetAllUsers(), HttpStatus.OK);

@@ -13,8 +13,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.data.mongodb.core.query.Query;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.example.UserManager.repository.CheckValues.getNullPropertyNames;
 
@@ -46,10 +49,15 @@ public class UserRepositoryTemplate implements UserRepository {
 
     @Override
     public List<UserDTO> GetAllUsers() throws ExceptionUserService {
-        List<UserDTO> users = mongoTemplate.findAll(UserDTO.class, "userDTO");
+        List<UserDTO> users = new ArrayList<>();
 
-        if(users.size() > 0) return users;
-        else throw new ExceptionUserService(ExceptionUserService.NoUsersFound());
+        try (Stream<UserDTO> stream = mongoTemplate.stream(Query.query(Criteria.where("_id").exists(true)), UserDTO.class)) {
+            stream.forEach(users::add);
+        }
+
+        if (users.isEmpty()) {
+            throw new ExceptionUserService(ExceptionUserService.NoUsersFound());
+        } else return users;
     }
 
     @Override
@@ -69,12 +77,10 @@ public class UserRepositoryTemplate implements UserRepository {
                 BeanUtils.copyProperties(tempDTO, userToUpdate, getNullPropertyNames(tempDTO));
                 mongoTemplate.save(userToUpdate);
             } else {
-                String errorMessage = "";
-                for (ConstraintViolation<UserDTO> violation : violations) {
-                    errorMessage += violation.getMessage() + "\n";
-                }
                 BeanUtils.copyProperties(userToUpdate, user, getNullPropertyNames(userToUpdate));
-                throw new ExceptionUserService(errorMessage);
+                throw new ExceptionUserService(violations.stream()
+                        .map(ConstraintViolation::getMessage)
+                        .collect(Collectors.joining("\n")));
             }
 
             return userToUpdate;
