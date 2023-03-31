@@ -6,14 +6,15 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.example.UserManager.repository.CheckValues.getNullPropertyNames;
 
@@ -41,7 +42,7 @@ public class UserRepositorySpring implements UserRepository {
     @Override
     public List<UserDTO> GetAllUsers() throws ExceptionUserService {
         List<UserDTO> users = userRepo.findAll(); //idk how to change to ArrayList
-
+        System.out.println(123);
         if(users.size() > 0) return users;
         else throw new ExceptionUserService(ExceptionUserService.NoUsersFound());
     }
@@ -58,18 +59,18 @@ public class UserRepositorySpring implements UserRepository {
             BeanUtils.copyProperties(user, tempDTO, getNullPropertyNames(user));
 
             Set<ConstraintViolation<UserDTO>> violations = validator.validate(tempDTO);
+
             if (violations.isEmpty()) {
                 BeanUtils.copyProperties(tempDTO, userToUpdate, getNullPropertyNames(tempDTO));
+
                 userRepo.save(userToUpdate);
             } else {
-                String errorMessage = "";
-                for (ConstraintViolation<UserDTO> violation : violations) {
-                    errorMessage += violation.getMessage() + "\n";
-                }
                 BeanUtils.copyProperties(userToUpdate, user, getNullPropertyNames(userToUpdate));
-                throw new ExceptionUserService(errorMessage);
-            }
 
+                throw new ExceptionUserService(violations.stream()
+                        .map(ConstraintViolation::getMessage)
+                        .collect(Collectors.joining("\n")));
+            }
             return userToUpdate;
         } else throw new ExceptionUserService(ExceptionUserService.ThisUserDoesNotExist());
     }

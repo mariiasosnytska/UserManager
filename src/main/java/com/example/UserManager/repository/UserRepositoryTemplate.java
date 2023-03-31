@@ -19,7 +19,7 @@ import java.util.Set;
 import static com.example.UserManager.repository.CheckValues.getNullPropertyNames;
 
 @Repository
-@Profile("default")
+@Profile("template")
 @RequiredArgsConstructor
 public class UserRepositoryTemplate implements UserRepository {
     private final MongoTemplate mongoTemplate;
@@ -33,6 +33,7 @@ public class UserRepositoryTemplate implements UserRepository {
 
     @Override
     public UserDTO GetUserById(String id) throws ExceptionUserService {
+        System.out.println("template");
         Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(id));
 

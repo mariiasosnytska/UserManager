@@ -6,7 +6,6 @@ import java.util.List;
 import com.example.UserManager.exception.ExceptionUserService;
 import com.example.UserManager.model.UserDTO;
 import com.example.UserManager.repository.UserRepository;
-import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
