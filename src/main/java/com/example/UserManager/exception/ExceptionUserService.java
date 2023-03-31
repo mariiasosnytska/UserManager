@@ -6,16 +6,11 @@ public class ExceptionUserService extends Exception{
     }
 
     public static String ThisUserDoesNotExist(){
-        return "Sorry, this User does not exist.";
+        return "{exception.UserNotFound}";
     }
 
     public static String NoUsersFound(){
-        return "Sorry, no Users found.";
+        return "{exception.noUsersFound}}";
     }
-
-    public static String UnvalidFields(){
-        return "Sorry, some fields are not valid";
-    }
-
 
 }

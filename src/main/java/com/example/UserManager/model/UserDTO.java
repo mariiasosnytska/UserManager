@@ -17,18 +17,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class UserDTO {
     @Id
     private String userId;
-    @NotEmpty(message = "Name should not be empty")
+    @NotEmpty(message = "{name.notempty}")
     private String name;
-    @NotEmpty(message = "Surname should not be empty")
+    @NotEmpty(message = "{surname.notempty}")
     private String surname;
     private String phoneNumber;
-    @NotEmpty(message = "Email should not be empty")
-    @Email(message = "Email should be valid")
+    @NotEmpty(message = "{email.notempty}")
+    @Email(message = "{email.valid}")
     private String email;
-    @NotEmpty(message = "Password should not be empty")
-    @NotNull(message = "Password should not be null")
-    @Size(min = 3, max = 30, message = "Password must have from 3 to 30 symbols")
+    @NotEmpty(message = "{Password should not be empty}")
+    @NotNull(message = "{password.notnull}")
+    @Size(min = 3, max = 30, message = "{password.validsize}")
     private String password; //maybe char[] better idk
-    private boolean isActive = true;
+    private boolean isActive;
 
 }
